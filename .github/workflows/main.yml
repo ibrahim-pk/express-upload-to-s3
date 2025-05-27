@@ -131,7 +131,10 @@ jobs:
             --exclude='.github' \
             . $EC2_USER@$EC2_HOST:~/app/
 
-          ssh $EC2_USER@$EC2_HOST "printf '%s\n' \"$ENV_FILE\" > ~/app/.env"  
+          # Upload ENV_FILE content using base64 to preserve newlines and special characters
+          echo "$ENV_FILE" | base64 > encoded_env.b64
+          scp encoded_env.b64 $EC2_USER@$EC2_HOST:~/app/
+          ssh $EC2_USER@$EC2_HOST "base64 -d ~/app/encoded_env.b64 > ~/app/.env && rm ~/app/encoded_env.b64" 
 
           # Install production dependencies and restart app using PM2
           ssh $EC2_USER@$EC2_HOST << 'EOF'
