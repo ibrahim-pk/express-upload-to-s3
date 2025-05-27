@@ -132,9 +132,7 @@ jobs:
             . $EC2_USER@$EC2_HOST:~/app/
 
           # Upload ENV_FILE content using base64 to preserve newlines and special characters
-          echo "$ENV_FILE" | base64 > encoded_env.b64
-          scp encoded_env.b64 $EC2_USER@$EC2_HOST:~/app/
-          ssh $EC2_USER@$EC2_HOST "base64 -d ~/app/encoded_env.b64 > ~/app/.env && rm ~/app/encoded_env.b64" 
+          echo "$ENV_FILE" | ssh $EC2_USER@$EC2_HOST "cat > ~/app/.env"
 
           # Install production dependencies and restart app using PM2
           ssh $EC2_USER@$EC2_HOST << 'EOF'
