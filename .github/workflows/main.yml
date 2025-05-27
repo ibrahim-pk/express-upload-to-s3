@@ -120,9 +120,11 @@ jobs:
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
+          ENV_FILE: ${{ secrets.ENV_FILE }}
         run: |
           # Upload project files to EC2
           ssh $EC2_USER@$EC2_HOST "mkdir -p ~/app"
+          echo $EC2_USER >> .env
           rsync -avz \
             --exclude='.git' \
             --exclude='node_modules' \
