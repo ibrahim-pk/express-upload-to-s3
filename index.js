@@ -53,7 +53,7 @@ app.post('/upload', upload.single('file'),async(req,res)=>{
 })
 
 app.get('/',(req,res)=>{
-    res.send("Hi AWS devops")
+    res.send("Hi AWS devops.Congtratulation for intregation CI/CD pipeline")
 })
 
 app.listen(5000,()=>console.log("Server is running"))
