@@ -124,12 +124,14 @@ jobs:
         run: |
           # Upload project files to EC2
           ssh $EC2_USER@$EC2_HOST "mkdir -p ~/app"
-          echo $EC2_USER >> .env
+          
           rsync -avz \
             --exclude='.git' \
             --exclude='node_modules' \
             --exclude='.github' \
             . $EC2_USER@$EC2_HOST:~/app/
+
+          ssh $EC2_USER@$EC2_HOST "printf '%s\n' \"$ENV_FILE\" > ~/app/.env"  
 
           # Install production dependencies and restart app using PM2
           ssh $EC2_USER@$EC2_HOST << 'EOF'
