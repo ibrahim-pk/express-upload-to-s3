@@ -130,9 +130,11 @@ jobs:
             --exclude='node_modules' \
             --exclude='.github' \
             . $EC2_USER@$EC2_HOST:~/app/
+           #adding .env file 
+           ssh $EC2_USER@$EC2_HOST "cat <<EOF > ~/app/.env
+           ${{ secrets.ENV_FILE }}
+           EOF"
 
-          # Upload ENV_FILE content using base64 to preserve newlines and special characters
-          echo "$ENV_FILE" | ssh $EC2_USER@$EC2_HOST "cat > ~/app/.env"
 
           # Install production dependencies and restart app using PM2
           ssh $EC2_USER@$EC2_HOST << 'EOF'
